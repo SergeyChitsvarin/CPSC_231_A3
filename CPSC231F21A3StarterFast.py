@@ -38,6 +38,25 @@ def setup():
     return pointer
 
 
+def drawing_axes_lines(pointer):
+    """
+    Draws the Y and X axes in blue so that the origin is at (300, 300)
+    :param pointer: the turtle pointer that draws
+    :return: drawing on the turtle screen
+    """
+
+    pointer.color("blue")
+    pointer.penup()
+    pointer.goto(0, 300)
+    pointer.pendown()
+    pointer.goto(600, 300)
+    pointer.penup()
+    pointer.goto(300, 600)
+    pointer.pendown()
+    pointer.goto(300, 0)
+    pointer.penup()
+
+
 def prompt_for_input():
     stars_location_file = input("Enter a stars location file: ")
     if stars_location_file == "":
@@ -52,9 +71,6 @@ def prompt_for_input():
             break
 
 
-prompt_for_input()
-
-
 def main(user_input):
     """
     Main constellation program
@@ -63,6 +79,7 @@ def main(user_input):
     print(user_input)
     # Handle arguments
     pointer = setup()
+    drawing_axes(pointer)
     # Read star information from file (function)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)

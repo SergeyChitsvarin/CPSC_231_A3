@@ -41,11 +41,15 @@ def setup():
 def prompt_for_input():
     stars_location_file = input("Enter a stars location file: ")
     if stars_location_file == "":
-        print("no file name given")
         while 1:
-            constellation_files = input("Enter a constellation file: ")
-            if constellation_files == "":
+            print("no file name given")
+            stars_location_file = input("Enter a stars location file: ")
+            if stars_location_file != "":
                 break
+    while 1:
+        constellation_files = input("Enter a constellation file: ")
+        if constellation_files == "":
+            break
 
 
 prompt_for_input()

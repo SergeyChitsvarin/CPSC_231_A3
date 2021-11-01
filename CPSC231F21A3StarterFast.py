@@ -38,11 +38,25 @@ def setup():
     return pointer
 
 
-def main():
+def prompt_for_input():
+    stars_location_file = input("Enter a stars location file: ")
+    if stars_location_file == "":
+        print("no file name given")
+        while 1:
+            constellation_files = input("Enter a constellation file: ")
+            if constellation_files == "":
+                break
+
+
+prompt_for_input()
+
+
+def main(user_input):
     """
     Main constellation program
     :return: None
     """
+    print(user_input)
     # Handle arguments
     pointer = setup()
     # Read star information from file (function)
@@ -62,7 +76,7 @@ def main():
         pass
 
 
-main()
+main(sys.argv[0:])
 
 print("\nClick on window to exit!\n")
 turtle.exitonclick()

@@ -18,13 +18,13 @@ HEIGHT = 600
 
 # AXIS CONSTANTS
 AXIS_COLOR = "blue"
-HALF_OF_TICK = 15
+HALF_OF_TICK = 5
 ZERO = 0
 
 # STAR CONSTANTS
 STAR_COLOR = "white"
 STAR_COLOR2 = "grey"
-LABEL_FROM_AXIS = 20
+LABEL_FROM_AXIS = 27
 
 
 def calc_to_screen_coord(x, y, x_origin, y_origin, ratio):
@@ -38,8 +38,8 @@ def calc_to_screen_coord(x, y, x_origin, y_origin, ratio):
     :return: (screen_x, screen_y) pixel version of calculator (x,y)
     """
     # calculates screen x and screen y and returns those values
-    screen_x = x_origin + (x * ratio)
-    screen_y = y_origin + (y * ratio)
+    screen_x = x_origin + (x * 4 * ratio)
+    screen_y = y_origin + (y * 4 * ratio)
     return screen_x, screen_y
 
 
@@ -52,7 +52,7 @@ def calculate_min_value(origin, ratio):
     """
     to_be_floored = (ZERO - origin)/ratio
     min_value = int(floor(to_be_floored))
-    return min_value
+    return -1
 
 
 def calculate_max_value(origin, ratio):
@@ -64,7 +64,7 @@ def calculate_max_value(origin, ratio):
     """
     to_be_ceiled = (WIDTH - origin)/ratio
     max_value = int(ceil(to_be_ceiled))
-    return max_value
+    return 1
 
 
 def calc_minmax_x(x_origin, ratio):
@@ -205,7 +205,7 @@ def draw_x_axis(pointer, x_origin, y_origin, ratio):
         draw_x_axis_tick(pointer, screen_x, screen_y)
         draw_x_axis_label(pointer, screen_x, screen_y, x)
         # jumps to next x
-        x = x+1
+        x = x+0.25
 
 
 def draw_y_axis(pointer, x_origin, y_origin, ratio):
@@ -232,7 +232,7 @@ def draw_y_axis(pointer, x_origin, y_origin, ratio):
         draw_y_axis_tick(pointer, screen_x, screen_y)
         draw_y_axis_label(pointer, screen_x, screen_y, y)
         # jumps to next y
-        y = y+1
+        y = y+0.25
 
 
 def prompt_for_input():

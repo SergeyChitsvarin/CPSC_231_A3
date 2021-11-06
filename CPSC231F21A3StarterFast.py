@@ -19,6 +19,9 @@ AXIS_COLOR = "blue"
 HALF_OF_TICK = 15
 ZERO = 0
 MIDDLE_OF_SCREEN = 300
+RATIO = 75
+X_ORIGIN = 300
+Y_ORIGIN = 300
 # STAR CONSTANTS
 STAR_COLOR = "white"
 STAR_COLOR2 = "grey"
@@ -41,6 +44,18 @@ def setup():
     return pointer
 
 
+def calc_to_screen_coordinates(y, x):
+    """
+    converts from from calculator x and y values to screen pixel values
+    :param y: calculator y
+    :param x: calculator x
+    :return: screen_x and screen_y which are pixel values for calculator x and y
+    """
+    screen_y = Y_ORIGIN + (y * RATIO)
+    screen_x = X_ORIGIN + (x * RATIO)
+    return screen_x, screen_y
+
+
 def drawing_axes_lines(pointer):
     """
     Draws the Y and X axes in blue so that the origin is at (300, 300)
@@ -59,32 +74,46 @@ def drawing_axes_lines(pointer):
     pointer.penup()
 
 
-def drawing_ticks_x_axis(pointer):
+def drawing_tick_x_axis(pointer, value_on_screen):
     """
     Draws ticks on the X axis using the turtle pointer
     :param pointer: the turtle pointer that draws
+    :param value_on_screen: the x value at which a tick starts
     :return: drawing on the turtle screen
     """
     pointer.color(AXIS_COLOR)
     pointer.penup()
-    pointer.goto(ZERO, MIDDLE_OF_SCREEN+HALF_OF_TICK)
+    pointer.goto(value_on_screen, MIDDLE_OF_SCREEN+HALF_OF_TICK)
     pointer.pendown()
-    pointer.goto(ZERO, MIDDLE_OF_SCREEN-HALF_OF_TICK)
+    pointer.goto(value_on_screen, MIDDLE_OF_SCREEN-HALF_OF_TICK)
     pointer.penup()
 
 
-def drawing_ticks_y_axis(pointer):
+def drawing_ticks_y_axis(pointer, value_on_screen):
     """
     Draws ticks on the Y axis using the turtle pointer
     :param pointer: the turtle pointer that draws
+    :param value_on_screen: the y value at which a tick starts
     :return: drawing on the turtle screen
     """
     pointer.color(AXIS_COLOR)
     pointer.penup()
-    pointer.goto(MIDDLE_OF_SCREEN+HALF_OF_TICK, HEIGHT)
+    pointer.goto(MIDDLE_OF_SCREEN+HALF_OF_TICK, value_on_screen)
     pointer.pendown()
-    pointer.goto(MIDDLE_OF_SCREEN-HALF_OF_TICK, HEIGHT)
+    pointer.goto(MIDDLE_OF_SCREEN-HALF_OF_TICK, value_on_screen)
     pointer.penup()
+
+
+def draw_all_x_axis_ticks(pointer):
+    for value in range(9):
+        value_on_screen = value * RATIO
+        drawing_tick_x_axis(pointer, value_on_screen)
+
+
+def draw_all_y_axis_ticks(pointer):
+    for value in range(9):
+        value_on_screen = value * RATIO
+        drawing_ticks_y_axis(pointer, value_on_screen)
 
 
 def prompt_for_input():
@@ -122,9 +151,9 @@ def main():
 
     # Handle arguments
     pointer = setup()
-    drawing_ticks_x_axis(pointer)
     drawing_axes_lines(pointer)
-    drawing_ticks_y_axis(pointer)
+    draw_all_x_axis_ticks(pointer)
+    draw_all_y_axis_ticks(pointer)
     # Read star information from file (function)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)

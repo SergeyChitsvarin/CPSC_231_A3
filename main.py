@@ -1,8 +1,5 @@
-def prompt_for_input():
-    stars_location_file = input("Enter a stars location file: ")
-    constellation_file = input("Enter a constellation file: ")
-    while constellation_file != "":
-        constellation_file = input("Enter a constellation file: ")
+# argv.py
+import sys
 
-
-prompt_for_input()
+print(f"Name of the script      : {sys.argv[0]=}")
+print(f"Arguments of the script : {sys.argv[1:]=}")

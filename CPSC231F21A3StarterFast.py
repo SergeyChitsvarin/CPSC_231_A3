@@ -20,81 +20,31 @@ HEIGHT = 600
 AXIS_COLOR = "blue"
 HALF_OF_TICK = 5
 ZERO = 0
+LABEL_FROM_AXIS = 27
+MIN_Y = -1
+MIN_X = -1
+MAX_Y = 1
+MAX_X = 1
+X_ORIGIN = 300
+Y_ORIGIN = 300
+RATIO = 75
 
 # STAR CONSTANTS
 STAR_COLOR = "white"
 STAR_COLOR2 = "grey"
-LABEL_FROM_AXIS = 27
 
 
-def calc_to_screen_coord(x, y, x_origin, y_origin, ratio):
+def calc_to_screen_coord(x, y):
     """
     Convert a calculator (x,y) to a pixel (screen_x, screen_y) based on origin location and ratio
     :param x: Calculator x
     :param y: Calculator y
-    :param x_origin: Pixel x origin of pixel coordinate system
-    :param y_origin: Pixel y origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
     :return: (screen_x, screen_y) pixel version of calculator (x,y)
     """
     # calculates screen x and screen y and returns those values
-    screen_x = x_origin + (x * 4 * ratio)
-    screen_y = y_origin + (y * 4 * ratio)
+    screen_x = X_ORIGIN + (x * 4 * RATIO)
+    screen_y = Y_ORIGIN + (y * 4 * RATIO)
     return screen_x, screen_y
-
-
-def calculate_min_value(origin, ratio):
-    """
-    Calculate smallest INTEGER (x or y) value to draw based on formula given in the assignment
-    :param origin: Pixel (x or y) origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
-    :return: min_value: Smallest (x or y) value to draw for a 0->WIDTH of screen
-    """
-    to_be_floored = (ZERO - origin)/ratio
-    min_value = int(floor(to_be_floored))
-    return -1
-
-
-def calculate_max_value(origin, ratio):
-    """
-    Calculate largest INTEGER (x or y) value to draw based on formula given in the assignment
-    :param origin: Pixel (x or y) origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
-    :return: max_value: Largest (x or y) value to draw for a 0->WIDTH of screen
-    """
-    to_be_ceiled = (WIDTH - origin)/ratio
-    max_value = int(ceil(to_be_ceiled))
-    return 1
-
-
-def calc_minmax_x(x_origin, ratio):
-    """
-    Calculate smallest and largest calculator INTEGER x value to draw for a 0->WIDTH of screen
-    Smallest: Convert a pixel x=0 to a calculator value and return integer floor
-    Largest : Convert a pixel x=WIDTH to a calculator value and return integer ceiling
-    :param x_origin: Pixel x origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
-    :return: (Smallest, Largest) x value to draw for a 0->WIDTH of screen
-    """
-    # calculates min and max values and returns them for x axis
-    min_x_value = calculate_min_value(x_origin, ratio)
-    max_x_value = calculate_max_value(x_origin, ratio)
-    return min_x_value, max_x_value
-
-
-def calc_minmax_y(y_origin, ratio):
-    """
-    Calculate smallest and largest calculator INTEGER y value to draw for a 0->HEIGHT of screen
-    Smallest: Convert a pixel y=0 to a calculator value and return integer floor
-    Largest : Convert a pixel y=HEIGHT to a calculator value and return integer ceiling
-    :param y_origin: Pixel y origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
-    :return: (Smallest, Largest) y value to draw for a 0->HEIGHT of screen
-    """
-    # calculates min and max values and returns them for y axis
-    max_y_value = calculate_max_value(y_origin, ratio)
-    min_y_value = calculate_min_value(y_origin, ratio)
-    return min_y_value, max_y_value
 
 
 def draw_line(pointer, screen_x1, screen_y1, screen_x2, screen_y2):
@@ -182,25 +132,21 @@ def draw_y_axis_label(pointer, screen_x, screen_y, label_text):
     pointer.write(label_text)
 
 
-def draw_x_axis(pointer, x_origin, y_origin, ratio):
+def draw_x_axis(pointer):
     """
     Draw an x-axis centred on given origin, with given ratio
     :param pointer: Turtle pointer to draw with
-    :param x_origin: Pixel x origin of pixel coordinate system
-    :param y_origin: Pixel y origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
     :return: None (just draws in turtle)
     """
     # draw x axis
-    draw_line(pointer, ZERO, y_origin, WIDTH, y_origin)
-    # calculates minimum and maximum x values
-    min_x, max_x = calc_minmax_x(x_origin, ratio)
+    draw_line(pointer, ZERO, Y_ORIGIN, WIDTH, Y_ORIGIN)
+
     # x begins at minimum x value
-    x = min_x
+    x = MIN_X
     # loops until the x value is smaller or equal to max_x
-    while x <= max_x:
+    while x <= MAX_X:
         # calculate screen_x and screen_y
-        screen_x, screen_y = calc_to_screen_coord(x, ZERO, x_origin, y_origin, ratio)
+        screen_x, screen_y = calc_to_screen_coord(x, ZERO)
         # draws ticks and labels on x axis
         draw_x_axis_tick(pointer, screen_x, screen_y)
         draw_x_axis_label(pointer, screen_x, screen_y, x)
@@ -208,26 +154,21 @@ def draw_x_axis(pointer, x_origin, y_origin, ratio):
         x = x+0.25
 
 
-def draw_y_axis(pointer, x_origin, y_origin, ratio):
+def draw_y_axis(pointer):
     """
     Draw an y-axis centred on given origin, with given ratio
     :param pointer: Turtle pointer to draw with
-    :param x_origin: Pixel x origin of pixel coordinate system
-    :param y_origin: Pixel y origin of pixel coordinate system
-    :param ratio: Ratio of pixel coordinate system (each 1 in calculator is worth ratio amount of pixels)
     :return: None (just draws in turtle)
     """
     # draw y axis
-    draw_line(pointer, x_origin, ZERO, x_origin, HEIGHT)
+    draw_line(pointer, X_ORIGIN, ZERO, X_ORIGIN, HEIGHT)
 
-    # calculates minimum and maximum y values
-    min_y, max_y = calc_minmax_y(y_origin, ratio)
     # y begins at minimum y value
-    y = min_y
+    y = MIN_Y
     # loops until the y value is smaller or equal to max_y
-    while y <= max_y:
+    while y <= MAX_Y:
         # calculate screen_x and screen_y
-        screen_x, screen_y = calc_to_screen_coord(ZERO, y, x_origin, y_origin, ratio)
+        screen_x, screen_y = calc_to_screen_coord(ZERO, y)
         # draws ticks and labels on y axis
         draw_y_axis_tick(pointer, screen_x, screen_y)
         draw_y_axis_label(pointer, screen_x, screen_y, y)
@@ -261,6 +202,7 @@ def prompt_for_input():
     #     if constellation_files == "":
     #         break
 
+
 def setup():
     """
     Setup the turtle window and return drawing pointer
@@ -291,14 +233,9 @@ def main():
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)
     # Draw Axes (function)
-
-    x_origin, y_origin = 300, 300
-    ratio = 75
-
-    # Draw axis
     pointer.color(AXIS_COLOR)
-    draw_x_axis(pointer, x_origin, y_origin, ratio)
-    draw_y_axis(pointer, x_origin, y_origin, ratio)
+    draw_x_axis(pointer)
+    draw_y_axis(pointer)
 
     turtle.update()
     # Draw Stars (function)

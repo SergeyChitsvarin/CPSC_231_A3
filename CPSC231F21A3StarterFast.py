@@ -176,31 +176,17 @@ def draw_y_axis(pointer):
         y = y+0.25
 
 
+def get_stars_location_file():
+    if len(sys.argv) > 1:
+        stars_location_file = sys.argv[1]
+        print(stars_location_file)
+    else:
+        stars_location_file = input("enter a stars location file: ")
+        print(stars_location_file)
+
+
 def prompt_for_input():
-    stars_location_file = sys.argv[0]
-    if stars_location_file == "":
-        stars_location_file_input = input("Enter a stars location file: ")
-        while stars_location_file_input == "":
-            print("no file name given")
-            stars_location_file_input = input("Enter a stars location file: ")
-    return stars_location_file
-
-    while 1:
-        constellation_files = input("Enter a constellation file: ")
-        if constellation_files == "":
-            break
-
-    # stars_location_file = input("Enter a stars location file: ")
-    # if stars_location_file == "":
-        # while 1:
-            # print("no file name given")
-            # stars_location_file = input("Enter a stars location file: ")
-            # if stars_location_file != "":
-                # break
-    # while 1:
-    #     constellation_files = input("Enter a constellation file: ")
-    #     if constellation_files == "":
-    #         break
+    get_stars_location_file()
 
 
 def setup():
@@ -227,12 +213,12 @@ def main():
     """
 
     # Handle arguments
-    pointer = setup()
-
+    prompt_for_input()
     # Read star information from file (function)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)
     # Draw Axes (function)
+    pointer = setup()
     pointer.color(AXIS_COLOR)
     draw_x_axis(pointer)
     draw_y_axis(pointer)

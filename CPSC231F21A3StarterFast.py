@@ -179,14 +179,20 @@ def draw_y_axis(pointer):
 def get_stars_location_file():
     if len(sys.argv) > 1:
         stars_location_file = sys.argv[1]
-        print(stars_location_file)
     else:
         stars_location_file = input("enter a stars location file: ")
-        print(stars_location_file)
+    return stars_location_file
+
+
+def constellation_file():
+    constellation_files = input("Enter a constellation file: ")
+    while constellation_files != "":
+        constellation_files = input("Enter a constellation file: ")
 
 
 def prompt_for_input():
-    get_stars_location_file()
+    stars_location = get_stars_location_file()
+    constellation_file()
 
 
 def setup():

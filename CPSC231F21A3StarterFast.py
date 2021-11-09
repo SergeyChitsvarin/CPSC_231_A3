@@ -178,10 +178,31 @@ def draw_y_axis(pointer):
 
 def get_stars_location_file():
     if len(sys.argv) > 1:
-        stars_location_file = sys.argv[1]
+        if sys.argv[1] == "-names":
+            stars_location_file = input("enter a stars location file: ")
+        else:
+            stars_location_file = sys.argv[1]
     else:
         stars_location_file = input("enter a stars location file: ")
     return stars_location_file
+
+
+def two_arguments():
+    if len(sys.argv) == 2:
+        if sys.argv[1] or sys.argv[2] != "names":
+            print("There was no names given in the two arguments, therefore the program can not be executed.")
+            exit()
+        else:
+            if sys.argv[1] == "-names":
+                stars_location_file = sys.argv[2]
+                return stars_location_file
+            elif sys.argv[2] == "-names":
+                stars_location_file = sys.argv[1]
+                return stars_location_file
+    else:
+        print("Too many arguments given.")
+        exit()
+    return
 
 
 def constellation_file():
@@ -193,6 +214,7 @@ def constellation_file():
 def prompt_for_input():
     stars_location = get_stars_location_file()
     constellation_file()
+    print(stars_location)
 
 
 def setup():

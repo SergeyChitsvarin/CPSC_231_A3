@@ -188,7 +188,7 @@ def get_stars_location_file():
     return stars_location_file
 
 
-def two_arguments_or_more():
+def three_or_more_arguments():
     if len(sys.argv) == 3:
         if sys.argv[1] or sys.argv[2] == "-names":
             if sys.argv[1] == "-names":
@@ -198,12 +198,11 @@ def two_arguments_or_more():
                 stars_location_file = sys.argv[1]
                 return stars_location_file
         if sys.argv[1] or sys.argv[2] != "-names":
-            print("There was no names given in the two arguments, therefore the program can not be executed.")
+            print("There was no '-names' given in the two arguments, therefore the program can not be executed.")
             exit()
     else:
         print("Too many arguments given.")
         exit()
-    return
 
 
 def constellation_file():
@@ -212,9 +211,9 @@ def constellation_file():
         constellation_files = input("Enter a constellation file: ")
 
 
-def prompt_for_input():
+def check_user_input():
     if len(sys.argv) > 2:
-        two_arguments_or_more()
+        three_or_more_arguments()
     if len(sys.argv) <= 2:
         stars_location = get_stars_location_file()
     constellation_file()
@@ -244,7 +243,7 @@ def main():
     """
 
     # Handle arguments
-    prompt_for_input()
+    check_user_input()
     # Read star information from file (function)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)

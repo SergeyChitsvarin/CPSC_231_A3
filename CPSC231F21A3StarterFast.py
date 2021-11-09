@@ -28,6 +28,7 @@ MAX_X = 1
 X_ORIGIN = 300
 Y_ORIGIN = 300
 RATIO = 75
+STEP_SIZE = 0.25
 
 # STAR CONSTANTS
 STAR_COLOR = "white"
@@ -151,7 +152,7 @@ def draw_x_axis(pointer):
         draw_x_axis_tick(pointer, screen_x, screen_y)
         draw_x_axis_label(pointer, screen_x, screen_y, x)
         # jumps to next x
-        x = x+0.25
+        x = x + STEP_SIZE
 
 
 def draw_y_axis(pointer):
@@ -187,18 +188,18 @@ def get_stars_location_file():
     return stars_location_file
 
 
-def two_arguments():
-    if len(sys.argv) == 2:
-        if sys.argv[1] or sys.argv[2] != "names":
-            print("There was no names given in the two arguments, therefore the program can not be executed.")
-            exit()
-        else:
+def two_arguments_or_more():
+    if len(sys.argv) == 3:
+        if sys.argv[1] or sys.argv[2] == "-names":
             if sys.argv[1] == "-names":
                 stars_location_file = sys.argv[2]
                 return stars_location_file
             elif sys.argv[2] == "-names":
                 stars_location_file = sys.argv[1]
                 return stars_location_file
+        if sys.argv[1] or sys.argv[2] != "-names":
+            print("There was no names given in the two arguments, therefore the program can not be executed.")
+            exit()
     else:
         print("Too many arguments given.")
         exit()
@@ -212,9 +213,11 @@ def constellation_file():
 
 
 def prompt_for_input():
-    stars_location = get_stars_location_file()
+    if len(sys.argv) > 2:
+        two_arguments_or_more()
+    if len(sys.argv) <= 2:
+        stars_location = get_stars_location_file()
     constellation_file()
-    print(stars_location)
 
 
 def setup():
@@ -223,13 +226,13 @@ def setup():
     :return: Turtle pointer for drawing
     """
     turtle.bgcolor(BACKGROUND_COLOR)
-    turtle.setup(WIDTH, HEIGHT, 0, 0)
+    turtle.setup(WIDTH, HEIGHT, ZERO, ZERO)
     screen = turtle.getscreen()
-    screen.delay(delay=0)
-    screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
+    screen.delay(delay=ZERO)
+    screen.setworldcoordinates(ZERO, ZERO, WIDTH, HEIGHT)
     pointer = turtle
     pointer.hideturtle()
-    pointer.speed(0)
+    pointer.speed(ZERO)
     pointer.up()
     return pointer
 

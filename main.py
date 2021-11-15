@@ -49,8 +49,6 @@ for line in opened_file:
     if names != "":
         stars_with_names_dictionary[names] = star_list
         print(f"{names} is at ({x},{y}) with magnitude {mag}")
-# ALPHERATZ is at (0.873265,0.031968) with magnitude 2.07
-# print(stars_with_names_dictionary)
 
 try:
     opened_file.close()

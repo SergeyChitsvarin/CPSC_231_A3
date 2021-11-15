@@ -1,0 +1,11 @@
+    #stars_location_file = 'C:\\Users\\serge\\OneDrive\\Desktop\\University\\2021\\Cpsc 231\\assignments\\A3\\CPSC_231_A3\\StarFiles\\stars_1.dat'
+    #stars_location_file = "C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/StarFiles/stars_1.dat"
+
+    #stars_location_file = "C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/StarFiles/stars_1_invalid_number_of_entries.dat"
+    #stars_location_file = "C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/StarFiles/stars_1_invalid_number_of_entries_greater_than_seven.dat"
+    #stars_location_file = "C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/StarFiles/stars_1_invalid_number_of_entries_ending_with_comma.dat"
+
+    #stars_location_file = "xxx"
+    #stars_location_file = "xxx.dat"
+    #stars_location_file = ".dat"
+    #stars_location_file = ""

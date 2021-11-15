@@ -227,6 +227,10 @@ def check_user_input():
     constellation_file()
 
 
+def read_star_information():
+
+
+
 def setup():
     """
     Setup the turtle window and return drawing pointer

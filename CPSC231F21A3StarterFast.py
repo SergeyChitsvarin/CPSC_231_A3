@@ -8,6 +8,7 @@
 
 import sys
 import os
+# reference: https://www.geeksforgeeks.org/python-os-path-isfile-method/
 import turtle
 from math import *
 
@@ -33,6 +34,7 @@ STEP_SIZE = 0.25
 # STAR CONSTANTS
 STAR_COLOR = "white"
 STAR_COLOR2 = "grey"
+MAX_NUMBER_OF_ARGUMENTS = 3
 
 
 def calc_to_screen_coord(x, y):
@@ -177,26 +179,28 @@ def draw_y_axis(pointer):
         y = y+0.25
 
 
-def get_stars_location_file():
+def two_or_less_arguments():
     if len(sys.argv) > 1:
         if sys.argv[1] == "-names":
             stars_location_file = input("enter a stars location file: ")
+            return True, stars_location_file
         else:
             stars_location_file = sys.argv[1]
+            return False, stars_location_file
     else:
         stars_location_file = input("enter a stars location file: ")
-    return stars_location_file
+        return False, stars_location_file
 
 
 def three_or_more_arguments():
-    if len(sys.argv) == 3:
+    if len(sys.argv) == MAX_NUMBER_OF_ARGUMENTS:
         if sys.argv[1] or sys.argv[2] == "-names":
             if sys.argv[1] == "-names":
                 stars_location_file = sys.argv[2]
-                return stars_location_file
+                return True, stars_location_file
             elif sys.argv[2] == "-names":
                 stars_location_file = sys.argv[1]
-                return stars_location_file
+                return True, stars_location_file
         if sys.argv[1] or sys.argv[2] != "-names":
             print("There was no '-names' given in the two arguments, therefore the program can not be executed.")
             exit()
@@ -205,17 +209,21 @@ def three_or_more_arguments():
         exit()
 
 
+def handle_input():
+    if len(sys.argv) > 2:
+        return three_or_more_arguments()
+    if len(sys.argv) <= 2:
+        return two_or_less_arguments()
+
+
 def constellation_file():
-    constellation_files = input("Enter a constellation file: ")
+    constellation_files = None
     while constellation_files != "":
         constellation_files = input("Enter a constellation file: ")
 
 
 def check_user_input():
-    if len(sys.argv) > 2:
-        three_or_more_arguments()
-    if len(sys.argv) <= 2:
-        stars_location = get_stars_location_file()
+    print_names, stars_location_file = handle_input()
     constellation_file()
 
 

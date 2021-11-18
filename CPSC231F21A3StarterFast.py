@@ -260,9 +260,9 @@ def read_line_by_line(opened_file):
         if not len(star_information) == 7:
             print("invalid number of entries separated by commas, should be equal to 7.")
             sys.exit(1)
-        x = star_information[0]
-        y = star_information[1]
-        mag = star_information[4]
+        x = float(star_information[0])
+        y = float(star_information[1])
+        mag = float(star_information[4])
         names = star_information[6]
         star_list = [x, y, mag, names]
         all_stars_list.append(star_list)
@@ -288,10 +288,11 @@ def read_star_information(stars_location_file):
     return all_stars_list, stars_with_names_dictionary
 
 
-def draw_star(pointer, x, y, mag):
+def draw_star(pointer, x, y, mag, star_color):
     screen_x, screen_y = calc_to_screen_coord(x, y)
     pointer.penup()
     pointer.goto(screen_x, screen_y)
+    pointer.color(star_color)
     pointer.pendown()
     diameter = 10/(mag + 2)
     pointer.dot(diameter)
@@ -305,14 +306,20 @@ def draw_star_name(pointer, name_of_star, x, y):
 
 
 def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary):
+    # https://www.geeksforgeeks.org/iterate-over-a-list-in-python/
     for i in all_stars_list:
-        x = float(i[0])
-        y = float(i[1])
-        mag = float(i[2])
-        name_of_star = i[3]
-        print(x, y, mag, name_of_star)
-        draw_star(pointer, x, y, mag)
-        draw_star_name(pointer, name_of_star, x, y)
+        x = i[0]
+        y = i[1]
+        mag = i[2]
+        draw_star(pointer, x, y, mag, STAR_COLOR2)
+    #https://www.w3schools.com/python/trypython.asp?filename=demo_dictionary_loop_items
+    for star_name, my_value in stars_with_names_dictionary.items():
+        x = my_value[0]
+        y = my_value[1]
+        mag = my_value[2]
+        draw_star(pointer, x, y, mag, STAR_COLOR)
+        if print_names is True:
+            draw_star_name(pointer, star_name, x, y)
 
 
 def setup():

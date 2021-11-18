@@ -224,8 +224,8 @@ def constellation_file():
 
 def check_user_input():
     print_names, stars_location_file = handle_input()
-    constellation_file()
     return print_names, stars_location_file
+
 
 def check_file_extension(stars_location_file):
     # Checking file extension https://coderedirect.com/questions/120290/how-can-i-check-the-extension-of-a-file
@@ -288,6 +288,33 @@ def read_star_information(stars_location_file):
     return all_stars_list, stars_with_names_dictionary
 
 
+def draw_star(pointer, x, y, mag):
+    screen_x, screen_y = calc_to_screen_coord(x, y)
+    pointer.penup()
+    pointer.goto(screen_x, screen_y)
+    pointer.pendown()
+    diameter = 10/(mag + 2)
+    pointer.dot(diameter)
+    pointer.penup()
+
+
+def draw_star_name(pointer, name_of_star, x, y):
+    screen_x, screen_y = calc_to_screen_coord(x, y)
+    pointer.goto(screen_x, screen_y + HALF_OF_TICK)
+    pointer.write(name_of_star, font=("Arial", 5, "normal"))
+
+
+def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary):
+    for i in all_stars_list:
+        x = float(i[0])
+        y = float(i[1])
+        mag = float(i[2])
+        name_of_star = i[3]
+        print(x, y, mag, name_of_star)
+        draw_star(pointer, x, y, mag)
+        draw_star_name(pointer, name_of_star, x, y)
+
+
 def setup():
     """
     Setup the turtle window and return drawing pointer
@@ -314,7 +341,8 @@ def main():
     # Handle arguments
     print_names, stars_location_file = check_user_input()
     # Read star information from file (function)
-    read_star_information(stars_location_file)
+    all_stars_list, stars_with_names_dictionary = read_star_information(stars_location_file)
+    print(stars_with_names_dictionary)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)
     # Draw Axes (function)
@@ -325,10 +353,12 @@ def main():
 
     turtle.update()
     # Draw Stars (function)
+    drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary)
     turtle.update()
     # Loop getting filenames
     while False:
         # Read constellation file (function)
+        # constellation_file()
         # Draw Constellation (function)
         turtle.update()
         # Draw bounding box (Bonus) (function)

@@ -3,4 +3,5 @@ should not fail
 
 2) split names
 names = star_information[6].split(';')
+replace with slash?
 

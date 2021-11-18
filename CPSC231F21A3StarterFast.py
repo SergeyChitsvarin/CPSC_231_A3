@@ -216,10 +216,19 @@ def handle_input():
         return two_or_less_arguments()
 
 
-def constellation_file():
-    constellation_files = None
-    while constellation_files != "":
-        constellation_files = input("Enter a constellation file: ")
+def handle_constellation_file_input():
+    while True:
+        # Read constellation file (function)
+        constellation_file_path = input("Enter a constellation file: ")
+        if constellation_file_path == "":
+            exit()
+        if os.path.isfile(constellation_file_path) is True:
+            # Draw Constellation (function)
+            turtle.update()
+            # Draw bounding box (Bonus) (function)
+            turtle.update()
+        else:
+            print("File name is invalid")
 
 
 def check_user_input():
@@ -349,7 +358,6 @@ def main():
     print_names, stars_location_file = check_user_input()
     # Read star information from file (function)
     all_stars_list, stars_with_names_dictionary = read_star_information(stars_location_file)
-    print(stars_with_names_dictionary)
     # Turns off draw update until turtle.update() is called
     turtle.tracer(0)
     # Draw Axes (function)
@@ -363,14 +371,8 @@ def main():
     drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary)
     turtle.update()
     # Loop getting filenames
-    while False:
-        # Read constellation file (function)
-        # constellation_file()
-        # Draw Constellation (function)
-        turtle.update()
-        # Draw bounding box (Bonus) (function)
-        turtle.update()
-        pass
+    handle_constellation_file_input()
+
 
 
 main()

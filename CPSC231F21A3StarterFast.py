@@ -44,6 +44,7 @@ def calc_to_screen_coord(x, y):
     :param y: Calculator y
     :return: (screen_x, screen_y) pixel version of calculator (x,y)
     """
+    # Refferences: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # calculates screen x and screen y and returns those values
     screen_x = X_ORIGIN + (x * 4 * RATIO)
     screen_y = Y_ORIGIN + (y * 4 * RATIO)
@@ -60,6 +61,7 @@ def draw_line(pointer, screen_x1, screen_y1, screen_x2, screen_y2):
     :param screen_y2: The pixel y of line end
     :return: None (just draws in turtle)
     """
+    # Refferences: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # go to starting point
     pointer.penup()
     pointer.goto(screen_x1, screen_y1)
@@ -78,6 +80,7 @@ def draw_x_axis_tick(pointer, screen_x, screen_y):
     :param screen_y: The pixel y of tick location on axis
     :return: None (just draws in turtle)
     """
+    # Refferences: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # defines start and end of tick
     screen_y1 = screen_y + HALF_OF_TICK
     screen_y2 = screen_y - HALF_OF_TICK
@@ -94,8 +97,9 @@ def draw_x_axis_label(pointer, screen_x, screen_y, label_text):
     :param label_text: The string label to draw
     :return: None (just draws in turtle)
     references:
-    1)writing on screen in turtle https://stackoverflow.com/questions/15141031/python-turtle-draw-text-with-on-screen-with-larger-font
-    2) align text to centre in turtle https://stackoverflow.com/questions/42265682/how-to-center-text-using-turtle-module-in-python
+    1)this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
+    2)writing on screen in turtle https://stackoverflow.com/questions/15141031/python-turtle-draw-text-with-on-screen-with-larger-font
+    3) align text to centre in turtle https://stackoverflow.com/questions/42265682/how-to-center-text-using-turtle-module-in-python
     """
     # this goes to specified x and y location and writes text below the x axis
     pointer.penup()
@@ -111,6 +115,7 @@ def draw_y_axis_tick(pointer, screen_x, screen_y):
     :param screen_y: The pixel y of tick location on axis
     :return: None (just draws in turtle)
     """
+    # References: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # defines start and end of tick
     screen_x1 = screen_x - HALF_OF_TICK
     screen_x2 = screen_x + HALF_OF_TICK
@@ -127,7 +132,8 @@ def draw_y_axis_label(pointer, screen_x, screen_y, label_text):
     :param label_text: The string label to draw
     :return: None (just draws in turtle)
     references:
-    1)writing on screen in turtle https://stackoverflow.com/questions/15141031/python-turtle-draw-text-with-on-screen-with-larger-font
+    1)this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
+    2)writing on screen in turtle https://stackoverflow.com/questions/15141031/python-turtle-draw-text-with-on-screen-with-larger-font
     """
     # this goes to specified x and y location and writes text on the left side of y axis.
     pointer.penup()
@@ -141,6 +147,7 @@ def draw_x_axis(pointer):
     :param pointer: Turtle pointer to draw with
     :return: None (just draws in turtle)
     """
+    # References: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # draw x axis
     draw_line(pointer, ZERO, Y_ORIGIN, WIDTH, Y_ORIGIN)
 
@@ -163,6 +170,7 @@ def draw_y_axis(pointer):
     :param pointer: Turtle pointer to draw with
     :return: None (just draws in turtle)
     """
+    # References: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # draw y axis
     draw_line(pointer, X_ORIGIN, ZERO, X_ORIGIN, HEIGHT)
 
@@ -180,6 +188,10 @@ def draw_y_axis(pointer):
 
 
 def two_or_less_arguments():
+    """
+    Function handles input if two or less command line arguments are given and returns the stars location file and a boolean value
+    :return: stars location file path and a boolean value for "-names"
+    """
     if len(sys.argv) > 1:
         if sys.argv[1] == "-names":
             stars_location_file = input("enter a stars location file: ")
@@ -193,6 +205,10 @@ def two_or_less_arguments():
 
 
 def three_or_more_arguments():
+    """
+    Function handles input if three or more arguments are given and returns a boolean value for "-names" and a constellation file
+    :return: boolean value for "-names" and a stars location file path.
+    """
     if len(sys.argv) == MAX_NUMBER_OF_ARGUMENTS:
         if sys.argv[1] or sys.argv[2] == "-names":
             if sys.argv[1] == "-names":
@@ -210,6 +226,10 @@ def three_or_more_arguments():
 
 
 def handle_input():
+    """
+    Function decides weather the "three_or_more_arguments" or the "two_or_less_arguments" functions should be used
+    :return: "three_or_more_arguments" or the "two_or_less_arguments" functions.
+    """
     if len(sys.argv) > 2:
         return three_or_more_arguments()
     if len(sys.argv) <= 2:
@@ -232,6 +252,10 @@ def handle_constellation_file_input():
 
 
 def check_user_input():
+    """
+    *****************************CHANGE ME LATER***************************************
+    :return: "three_or_more_arguments" or the "two_or_less_arguments" functions.
+    """
     print_names, stars_location_file = handle_input()
     return print_names, stars_location_file
 

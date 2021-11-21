@@ -241,13 +241,28 @@ def handle_input():
 
 def read_line_by_line_constellation(opened_file):
     constellation_list = []
+    line_number = 0
+    constellation_name = None
     for line in opened_file:
-        constellation_edges = line.rstrip().split(",")
-        if not (MIN_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE <= len(constellation_edges) <= MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
-            print("Invalid number of entries separated by commas on one of the lines, should be equal to 2.")
-            sys.exit(1)
-        constellation_list.append(constellation_edges)
-    return constellation_list
+        line_number = line_number + 1
+        if line_number == 1:
+            constellation_name = line.rstrip()
+        else:
+            constellation_edges = line.rstrip().split(",")
+            if not (len(constellation_edges) == MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
+                print("Invalid number of entries separated by commas on one of the lines, should be equal to 2.")
+                sys.exit(1)
+            constellation_list.append(constellation_edges)
+    return constellation_name, constellation_list
+
+
+def constellation_to_console(constellation_name, constellation_list):
+    # references: Getting keys from a dictionary https://www.geeksforgeeks.org/python-get-dictionary-keys-as-a-list/
+    used_stars = {}
+    for sub_list in constellation_list:
+        for name in sub_list:
+            used_stars[name] = True
+    print(f"{constellation_name} constellation contains {list(used_stars.keys())}")
 
 
 def handle_constellation_file_input():
@@ -259,7 +274,9 @@ def handle_constellation_file_input():
         if os.path.isfile(constellation_file_path) is True:
             check_file_extension(constellation_file_path)
             opened_file = open_file(constellation_file_path)
-            constellation_list = read_line_by_line_constellation(opened_file)
+            constellation_name, constellation_list = read_line_by_line_constellation(opened_file)
+            constellation_to_console(constellation_name, constellation_list)
+            # return_into_console_constellation(opened_file)
             close_file(opened_file, constellation_file_path)
             # Draw Constellation (function)
             turtle.update()
@@ -399,7 +416,6 @@ def main():
     Main constellation program
     :return: None
     """
-    handle_constellation_file_input()
     # Handle arguments
     print_names, stars_location_file = check_user_input()
     # Read star information from file (function)

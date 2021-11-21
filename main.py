@@ -1,11 +1,16 @@
 import sys
 
-stars_location_file = [['0.512379', '0.020508', '2.28', 'CAPH;CAS BETA'],
-                       ['0.450342', '0.065296', '4.17', 'CAS KAPPA'],
-                       ['0.581589', '0.094643', '3.69', 'CAS ZETA']]
-for i in stars_location_file:
-    x = float(i[0])
-    y = float(i[1])
-    mag = float(i[2])
-    name_of_star = i[3]
-    print(x, y, mag, name_of_star)
+constellation_list = [['CAS EPSILON', 'CAS DELTA'],
+                       ['CAS DELTA', 'CAS GAMMA'],
+                       ['CAS GAMMA', 'SCHEDAR'],
+                       ['SCHEDAR', 'CAPH'],
+                       ['CAS GAMMA', 'CAS KAPPA'],
+                       ['CAS KAPPA', 'CAS IOTA'],
+                       ['SCHEDAR', 'CAS ZETA'],
+                       ['CAS ZETA', 'CAS THETA']]
+used_stars = {}
+for sub_list in constellation_list:
+    for name in sub_list:
+        used_stars[name] = True
+
+print(list(used_stars.keys()))

@@ -8,3 +8,5 @@ replace with slash?
 
 4) float conversion - try to convert not a number
 5) check if empty file is acceptable with stars
+6) number of entries in star files (len on different lines)
+7) ask about -names

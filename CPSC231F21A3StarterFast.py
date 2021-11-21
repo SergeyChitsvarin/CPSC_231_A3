@@ -37,8 +37,8 @@ STAR_COLOR2 = "grey"
 MAX_NUMBER_OF_ARGUMENTS = 3
 
 # FILE CONSTANTS
-MIN_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 1
-MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 2
+NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 2
+
 
 def calc_to_screen_coord(x, y):
     """
@@ -249,7 +249,7 @@ def read_line_by_line_constellation(opened_file):
             constellation_name = line.rstrip()
         else:
             constellation_edges = line.rstrip().split(",")
-            if not (len(constellation_edges) == MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
+            if not (len(constellation_edges) == NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
                 print("Invalid number of entries separated by commas on one of the lines, should be equal to 2.")
                 sys.exit(1)
             constellation_list.append(constellation_edges)
@@ -335,12 +335,14 @@ def read_line_by_line_stars(opened_file):
         x = float(star_information[0])
         y = float(star_information[1])
         mag = float(star_information[4])
-        names = star_information[6]
-        star_list = [x, y, mag, names]
-        all_stars_list.append(star_list)
-        if names != "":
-            stars_with_names_dictionary[names] = star_list
-            print(f"{names} is at ({x},{y}) with magnitude {mag}")
+        names = star_information[6].split(';')
+        for name in names:
+            star_list = [x, y, mag, name]
+            all_stars_list.append(star_list)
+            if name != "":
+                stars_with_names_dictionary[name] = star_list
+                print(f"{name} is at ({x},{y}) with magnitude {mag}")
+    print(all_stars_list)
     return all_stars_list, stars_with_names_dictionary
 
 
@@ -392,6 +394,10 @@ def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_diction
         draw_star(pointer, x, y, mag, STAR_COLOR)
         if print_names is True:
             draw_star_name(pointer, star_name, x, y)
+
+
+def drawing_constellation():
+    print("hi")
 
 
 def setup():

@@ -9,3 +9,7 @@
     #stars_location_file = "xxx.dat"
     #stars_location_file = ".dat"
     #stars_location_file = ""
+
+    constellation_files:
+C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/ConstellationFiles/Cas.dat
+

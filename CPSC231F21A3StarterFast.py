@@ -236,6 +236,17 @@ def handle_input():
         return two_or_less_arguments()
 
 
+def read_line_by_line_constellation(opened_file):
+    constellation_list = []
+    for line in opened_file:
+        constellation_edges = line.rstrip().split(",")
+        print(constellation_edges)
+        if not (len(constellation_edges) == 1 or len(constellation_edges) == 2):
+            print("invalid number of entries separated by commas, should be equal to 2.")
+            sys.exit(1)
+        constellation_list = constellation_list.append(constellation_edges)
+
+
 def handle_constellation_file_input():
     while True:
         # Read constellation file (function)
@@ -243,12 +254,16 @@ def handle_constellation_file_input():
         if constellation_file_path == "":
             exit()
         if os.path.isfile(constellation_file_path) is True:
+            check_file_extension(constellation_file_path)
+            opened_file = open_file(constellation_file_path)
+            read_line_by_line_constellation(opened_file)
+            close_file(opened_file, constellation_file_path)
             # Draw Constellation (function)
             turtle.update()
             # Draw bounding box (Bonus) (function)
             turtle.update()
         else:
-            print("File name is invalid")
+            print("entered path is not a file")
 
 
 def check_user_input():
@@ -282,8 +297,8 @@ def open_file(stars_location_file):
     return opened_file
 
 
-def read_line_by_line(opened_file):
-    #reading file line by line https://stackoverflow.com/questions/3277503/how-to-read-a-file-line-by-line-into-a-list
+def read_line_by_line_stars(opened_file):
+    # reading file line by line https://stackoverflow.com/questions/3277503/how-to-read-a-file-line-by-line-into-a-list
     # rstrip function https://www.geeksforgeeks.org/python-string-rstrip/?ref=lbp
     # add elements to list https://www.w3schools.com/python/python_lists_add.asp
     stars_with_names_dictionary = {}
@@ -305,18 +320,18 @@ def read_line_by_line(opened_file):
     return all_stars_list, stars_with_names_dictionary
 
 
-def close_file(opened_file, stars_location_file):
+def close_file(opened_file, file_path):
     try:
         opened_file.close()
     except Exception as error:
-        print(f"Unexpected error happened trying to close this file '{stars_location_file}'. Error {error}")
+        print(f"Unexpected error happened trying to close this file '{file_path}'. Error {error}")
         sys.exit(1)
 
 
 def read_star_information(stars_location_file):
     check_file_extension(stars_location_file)
     opened_file = open_file(stars_location_file)
-    all_stars_list, stars_with_names_dictionary = read_line_by_line(opened_file)
+    all_stars_list, stars_with_names_dictionary = read_line_by_line_stars(opened_file)
     close_file(opened_file, stars_location_file)
     return all_stars_list, stars_with_names_dictionary
 
@@ -345,7 +360,7 @@ def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_diction
         y = i[1]
         mag = i[2]
         draw_star(pointer, x, y, mag, STAR_COLOR2)
-    #https://www.w3schools.com/python/trypython.asp?filename=demo_dictionary_loop_items
+    # https://www.w3schools.com/python/trypython.asp?filename=demo_dictionary_loop_items
     for star_name, my_value in stars_with_names_dictionary.items():
         x = my_value[0]
         y = my_value[1]
@@ -377,7 +392,7 @@ def main():
     Main constellation program
     :return: None
     """
-
+    handle_constellation_file_input()
     # Handle arguments
     print_names, stars_location_file = check_user_input()
     # Read star information from file (function)
@@ -396,7 +411,6 @@ def main():
     turtle.update()
     # Loop getting filenames
     handle_constellation_file_input()
-
 
 
 main()

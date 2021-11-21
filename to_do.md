@@ -7,3 +7,4 @@ names = star_information[6].split(';')
 replace with slash?
 
 4) float conversion - try to convert not a number
+5) check if empty file is acceptable with stars

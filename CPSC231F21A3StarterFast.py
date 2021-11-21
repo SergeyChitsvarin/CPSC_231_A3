@@ -36,6 +36,9 @@ STAR_COLOR = "white"
 STAR_COLOR2 = "grey"
 MAX_NUMBER_OF_ARGUMENTS = 3
 
+# FILE CONSTANTS
+MIN_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 1
+MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 2
 
 def calc_to_screen_coord(x, y):
     """
@@ -240,11 +243,11 @@ def read_line_by_line_constellation(opened_file):
     constellation_list = []
     for line in opened_file:
         constellation_edges = line.rstrip().split(",")
-        print(constellation_edges)
-        if not (len(constellation_edges) == 1 or len(constellation_edges) == 2):
-            print("invalid number of entries separated by commas, should be equal to 2.")
+        if not (MIN_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE <= len(constellation_edges) <= MAX_NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
+            print("Invalid number of entries separated by commas on one of the lines, should be equal to 2.")
             sys.exit(1)
-        constellation_list = constellation_list.append(constellation_edges)
+        constellation_list.append(constellation_edges)
+    return constellation_list
 
 
 def handle_constellation_file_input():
@@ -256,14 +259,14 @@ def handle_constellation_file_input():
         if os.path.isfile(constellation_file_path) is True:
             check_file_extension(constellation_file_path)
             opened_file = open_file(constellation_file_path)
-            read_line_by_line_constellation(opened_file)
+            constellation_list = read_line_by_line_constellation(opened_file)
             close_file(opened_file, constellation_file_path)
             # Draw Constellation (function)
             turtle.update()
             # Draw bounding box (Bonus) (function)
             turtle.update()
         else:
-            print("entered path is not a file")
+            print("Entered path is not a file")
 
 
 def check_user_input():
@@ -282,17 +285,21 @@ def check_file_extension(stars_location_file):
         sys.exit(1)
 
 
-def open_file(stars_location_file):
+def open_file(file_path):
     try:
         #  Reading file https://www.w3schools.com/python/python_file_open.asp
         # Exit with error https://stackoverflow.com/questions/9426045/difference-between-exit0-and-exit1-in-python
+        # Check if a file is empty using os.stat(): https://thispointer.com/python-three-ways-to-check-if-a-file-is-empty/
         # Try/except errors while opening file https://stackoverflow.com/questions/5627425/what-is-a-good-way-to-handle-exceptions-when-trying-to-read-a-file-in-python
-        opened_file = open(stars_location_file, "r")
+        opened_file = open(file_path, "r")
+        if os.stat(file_path).st_size == ZERO:
+            print(f"File {file_path} is empty")
+            sys.exit(1)
     except FileNotFoundError:
-        print(f"This file '{stars_location_file}' is not found. Exiting.")
+        print(f"This file '{file_path}' is not found. Exiting.")
         sys.exit(1)
     except Exception as error:
-        print(f"Unexpected error happened trying to open this file '{stars_location_file}'. Error {error}")
+        print(f"Unexpected error happened trying to open this file '{file_path}'. Error {error}")
         sys.exit(1)
     return opened_file
 

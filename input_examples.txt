@@ -13,7 +13,7 @@
     constellation_files:
 C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/ConstellationFiles/Cas.dat
 
-invalid:
+    invalid:
 C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/ConstellationFiles/BigDipper_invalid_number_of_entries_too_many.dat
 C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/ConstellationFiles/BigDipper_invalid_number_of_entries_not_enough.dat
 C:/Users/serge/OneDrive/Desktop/University/2021/Cpsc 231/assignments/A3/CPSC_231_A3/ConstellationFiles/BigDipper_invalid_number_of_entries_empty_line.dat

@@ -39,6 +39,12 @@ MAX_NUMBER_OF_ARGUMENTS = 3
 # FILE CONSTANTS
 NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE = 2
 
+# COLOR CONSTANTS
+TOTAL_COLORS = 3
+RED_MODULUS = 1
+YELLOW_MODULUS = 2
+GREEN_MODULUS = 0
+
 
 def calc_to_screen_coord(x, y):
     """
@@ -64,7 +70,7 @@ def draw_line(pointer, screen_x1, screen_y1, screen_x2, screen_y2):
     :param screen_y2: The pixel y of line end
     :return: None (just draws in turtle)
     """
-    # Refferences: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
+    # References: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
     # go to starting point
     pointer.penup()
     pointer.goto(screen_x1, screen_y1)
@@ -222,10 +228,10 @@ def three_or_more_arguments():
                 return True, stars_location_file
         if sys.argv[1] or sys.argv[2] != "-names":
             print("There was no '-names' given in the two arguments, therefore the program can not be executed.")
-            exit()
+            sys.exit(1)
     else:
         print("Too many arguments given.")
-        exit()
+        sys.exit(1)
 
 
 def handle_input():
@@ -265,23 +271,66 @@ def constellation_to_console(constellation_name, constellation_list):
     print(f"{constellation_name} constellation contains {list(used_stars.keys())}")
 
 
-def handle_constellation_file_input():
+def drawing_constellation(pointer, constellation_list, stars_with_names_dictionary, constellation_color):
+    try:
+        for pairs in constellation_list:
+            star_1 = pairs[0]
+            star_2 = pairs[1]
+            list_star_1 = stars_with_names_dictionary[star_1]
+            list_star_2 = stars_with_names_dictionary[star_2]
+            x1 = list_star_1[0]
+            y1 = list_star_1[1]
+            x2 = list_star_2[0]
+            y2 = list_star_2[1]
+            screen_x1, screen_y1 = calc_to_screen_coord(x1, y1)
+            screen_x2, screen_y2 = calc_to_screen_coord(x2, y2)
+            pointer.color(constellation_color)
+            draw_line(pointer, screen_x1, screen_y1, screen_x2, screen_y2)
+    except KeyError as error:
+        print(f"The star named {error} can not be found.")
+        sys.exit(1)
+
+
+def get_color(constellation_counter):
+    """
+    Get color for an equation based on counter of how many equations have been drawn (this is the xth equation)
+    :param constellation_counter: Number x, for xth constellation being drawn
+    :return: A string color for turtle to use
+    """
+    # References: this code is taken from my Assignment 2 from class CPSC 231 Fall 2021 submitted on oct 22, 2021
+    # calculates modulus using equation counter and total colours
+    modulus = constellation_counter % TOTAL_COLORS
+    # returns alternate colors based on value of modulus
+    if modulus == RED_MODULUS:
+        return "red"
+    if modulus == YELLOW_MODULUS:
+        return "yellow"
+    if modulus == GREEN_MODULUS:
+        return "green"
+
+
+def handle_constellation_file_input(pointer, stars_with_names_dictionary):
+    constellation_counter = 0
     while True:
         # Read constellation file (function)
         constellation_file_path = input("Enter a constellation file: ")
         if constellation_file_path == "":
             exit()
         if os.path.isfile(constellation_file_path) is True:
+            constellation_color = get_color(constellation_counter)
+            constellation_counter = constellation_counter + 1
+            print(constellation_counter)
             check_file_extension(constellation_file_path)
             opened_file = open_file(constellation_file_path)
             constellation_name, constellation_list = read_line_by_line_constellation(opened_file)
             constellation_to_console(constellation_name, constellation_list)
-            # return_into_console_constellation(opened_file)
             close_file(opened_file, constellation_file_path)
             # Draw Constellation (function)
+            drawing_constellation(pointer, constellation_list, stars_with_names_dictionary, constellation_color)
             turtle.update()
             # Draw bounding box (Bonus) (function)
             turtle.update()
+
         else:
             print("Entered path is not a file")
 
@@ -342,7 +391,6 @@ def read_line_by_line_stars(opened_file):
             if name != "":
                 stars_with_names_dictionary[name] = star_list
                 print(f"{name} is at ({x},{y}) with magnitude {mag}")
-    print(all_stars_list)
     return all_stars_list, stars_with_names_dictionary
 
 
@@ -396,10 +444,6 @@ def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_diction
             draw_star_name(pointer, star_name, x, y)
 
 
-def drawing_constellation():
-    print("hi")
-
-
 def setup():
     """
     Setup the turtle window and return drawing pointer
@@ -439,7 +483,7 @@ def main():
     drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary)
     turtle.update()
     # Loop getting filenames
-    handle_constellation_file_input()
+    handle_constellation_file_input(pointer, stars_with_names_dictionary)
 
 
 main()

@@ -246,6 +246,11 @@ def handle_input():
 
 
 def read_line_by_line_constellation(opened_file):
+    """
+    Function goes through the constellation file line by line
+    :param: opened_file is the constellation file provided by the user that is open
+    :return: constellation_name, the name of the constellation and constellation_list a list of all the edges in the constellation.
+    """
     constellation_list = []
     line_number = 0
     constellation_name = None
@@ -262,16 +267,25 @@ def read_line_by_line_constellation(opened_file):
     return constellation_name, constellation_list
 
 
-def constellation_to_console(constellation_name, constellation_list):
+def print_and_get_used_stars(constellation_name, constellation_list):
     # references: Getting keys from a dictionary https://www.geeksforgeeks.org/python-get-dictionary-keys-as-a-list/
     used_stars = {}
     for sub_list in constellation_list:
         for name in sub_list:
             used_stars[name] = True
     print(f"{constellation_name} constellation contains {list(used_stars.keys())}")
+    return used_stars
 
 
 def drawing_constellation(pointer, constellation_list, stars_with_names_dictionary, constellation_color):
+    """
+    Function draws a constellation in turtle using pointer, constellation_list, stars_with_names_dictionary and constellation_color
+    :param: pointer, Turtle pointer to draw with.
+    :param: constellation_list, a list of all the edges for a certain constellation
+    :param: stars_with_names_dictionary, a dictionary that provides the details about stars using their name as the key
+    :param: constellation_color, one of three colors(red,yellow,green) which alternate with each constellation drawn.
+    :return: Function draws a given constellation in turtle.
+    """
     try:
         for pairs in constellation_list:
             star_1 = pairs[0]
@@ -310,6 +324,12 @@ def get_color(constellation_counter):
 
 
 def handle_constellation_file_input(pointer, stars_with_names_dictionary):
+    """
+    Function handles the input of constellation files using multiple functions.
+    :param: pointer, Turtle pointer to draw with.
+    :param: stars_with_names_dictionary, a dictionary that provides the details about stars using their name as the key
+    :return: Function goes through constellation files exits the program for certain issues, and draws the constellations if no errors found.
+    """
     constellation_counter = 0
     while True:
         # Read constellation file (function)
@@ -323,7 +343,7 @@ def handle_constellation_file_input(pointer, stars_with_names_dictionary):
             check_file_extension(constellation_file_path)
             opened_file = open_file(constellation_file_path)
             constellation_name, constellation_list = read_line_by_line_constellation(opened_file)
-            constellation_to_console(constellation_name, constellation_list)
+            used_stars = print_and_get_used_stars(constellation_name, constellation_list)
             close_file(opened_file, constellation_file_path)
             # Draw Constellation (function)
             drawing_constellation(pointer, constellation_list, stars_with_names_dictionary, constellation_color)
@@ -345,6 +365,11 @@ def check_user_input():
 
 
 def check_file_extension(stars_location_file):
+    """
+    Function checks if the extension of the file is ".dat" if it is not the function exits the program.
+    :param: stars_location_file, the path given by the user to the star files.
+    :return: Function goes through the stars_location_file making sure it will only be valid if the extension is ".dat"
+    """
     # Checking file extension https://coderedirect.com/questions/120290/how-can-i-check-the-extension-of-a-file
     if not stars_location_file.endswith('.dat'):
         print(f"extension of the file '{stars_location_file}' is not '.dat'. Exiting")
@@ -352,6 +377,11 @@ def check_file_extension(stars_location_file):
 
 
 def open_file(file_path):
+    """
+    Function reads through the file making sure it is not empty, the file exists as well as any other common errors.
+    :param: file_path, the file path that goes to certain files such as constellation or star files.
+    :return: opened_file, function opens the file and returns the opened file.
+    """
     try:
         #  Reading file https://www.w3schools.com/python/python_file_open.asp
         # Exit with error https://stackoverflow.com/questions/9426045/difference-between-exit0-and-exit1-in-python
@@ -371,6 +401,12 @@ def open_file(file_path):
 
 
 def read_line_by_line_stars(opened_file):
+    """
+    Function goes through the stars file and uses the information to create the stars_with_names_dictionary and the all_stars_list.
+    :param: opened_file, the opened stars file.
+    :return: stars_with_names_dictionary, a dictionary that provides the details about stars using their name as the key, all_stars_list, a list of the details of all stars.
+
+    """
     # reading file line by line https://stackoverflow.com/questions/3277503/how-to-read-a-file-line-by-line-into-a-list
     # rstrip function https://www.geeksforgeeks.org/python-string-rstrip/?ref=lbp
     # add elements to list https://www.w3schools.com/python/python_lists_add.asp
@@ -395,6 +431,12 @@ def read_line_by_line_stars(opened_file):
 
 
 def close_file(opened_file, file_path):
+    """
+    Function closes the previously opened file
+    :param: opened_file, the previously opened file containing either star or constellation information.
+    :param: file_path, either the path to star files or constellation files.
+    :return: Function closes opened file.
+    """
     try:
         opened_file.close()
     except Exception as error:
@@ -403,6 +445,11 @@ def close_file(opened_file, file_path):
 
 
 def read_star_information(stars_location_file):
+    """
+    Function checks stars_location_files, opens them uses them to read the information and closes the file using other functions
+    :param: stars_location_file, path given by user to the star files
+    :return: stars_with_names_dictionary, a dictionary that provides the details about stars using their name as the key, all_stars_list, a list of the details of all stars.
+    """
     check_file_extension(stars_location_file)
     opened_file = open_file(stars_location_file)
     all_stars_list, stars_with_names_dictionary = read_line_by_line_stars(opened_file)
@@ -411,6 +458,15 @@ def read_star_information(stars_location_file):
 
 
 def draw_star(pointer, x, y, mag, star_color):
+    """
+    Function draws a star in turtle using pointer, x, y, mag and star_color
+    :param: pointer, Turtle pointer to draw with.
+    :param: x, on screen x location of star.
+    :param: y, on screen y location of star.
+    :param: mag, magnitude of the star
+    :param: star_color, the color of the star depending on if it has a name or does not have a name.
+    :return: Function draws a given star in turtle.
+    """
     screen_x, screen_y = calc_to_screen_coord(x, y)
     pointer.penup()
     pointer.goto(screen_x, screen_y)
@@ -422,12 +478,28 @@ def draw_star(pointer, x, y, mag, star_color):
 
 
 def draw_star_name(pointer, name_of_star, x, y):
+    """
+    Function draws a star name in turtle
+    :param: pointer, Turtle pointer to draw with.
+    :param: name_of_star, the name of a certain star.
+    :param: x, on screen x location of star.
+    :param: y, on screen y location of star.
+    :return: Function draws a given star name in turtle.
+    """
     screen_x, screen_y = calc_to_screen_coord(x, y)
     pointer.goto(screen_x, screen_y + HALF_OF_TICK)
     pointer.write(name_of_star, font=("Arial", 5, "normal"))
 
 
 def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_dictionary):
+    """
+    Function draws a star in turtle using pointer, x, y, mag and star_color
+    :param: pointer, Turtle pointer to draw with.
+    :param: print_names
+    :param: all_stars_list, a list of the details of all stars.
+    :param: stars_with_names_dictionary, a dictionary that provides the details about stars using their name as the key
+    :return: Function draws multiple stars and their names in turtle screen.
+    """
     # https://www.geeksforgeeks.org/iterate-over-a-list-in-python/
     for i in all_stars_list:
         x = i[0]

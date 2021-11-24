@@ -6,6 +6,16 @@
 
 # INFORMATION FOR YOUR TA
 
+# Class: CPSC 231 FALL 2021
+# Name: Sergey Chitsvarin
+# Tutorial: 02
+# Student id: 30154758
+# Date: 2021/11/23
+# description: This program draws certain stars and constellations in the galaxy by using user input via command line arguments.
+# in the command line arguments the user can provide "-names" and a stars location file. The "-names" trigger makes the program draw names for the stars that have names.
+# The stars location file is a path to the stars information and only the stars in that certain file will be drawn. If the stars location file was not provided the program will continue asking
+# until a valid file path is given. After the program will continue asking for constellation files to draw in alternating colors until the user enters "".
+
 import sys
 import os
 # reference: https://www.geeksforgeeks.org/python-os-path-isfile-method/
@@ -202,6 +212,7 @@ def two_or_less_arguments():
     :return: stars location file path and a boolean value for "-names"
     """
     if len(sys.argv) > 1:
+        # if more than one argument is given the argument that is not "-names" is assigned as stars_location_file and "-names" is returned as false however if it is "-names" the program asks for a stars location file.
         if sys.argv[1] == "-names":
             stars_location_file = input("enter a stars location file: ")
             return True, stars_location_file
@@ -209,6 +220,7 @@ def two_or_less_arguments():
             stars_location_file = sys.argv[1]
             return False, stars_location_file
     else:
+        # if no arguments were given the program will ask for the stars_location_file and return false for "-names".
         stars_location_file = input("enter a stars location file: ")
         return False, stars_location_file
 
@@ -219,6 +231,7 @@ def three_or_more_arguments():
     :return: boolean value for "-names" and a stars location file path.
     """
     if len(sys.argv) == MAX_NUMBER_OF_ARGUMENTS:
+        # if 3 arguments are given and one of them is "-names" the other argument is assigned as stars_location_file.
         if sys.argv[1] or sys.argv[2] == "-names":
             if sys.argv[1] == "-names":
                 stars_location_file = sys.argv[2]
@@ -227,9 +240,11 @@ def three_or_more_arguments():
                 stars_location_file = sys.argv[1]
                 return True, stars_location_file
         if sys.argv[1] or sys.argv[2] != "-names":
+            # if neither of the arguments beside the name were not names the program exits because "-names" was not provided.
             print("There was no '-names' given in the two arguments, therefore the program can not be executed.")
             sys.exit(1)
     else:
+        # if more than 3 arguments are given the program exits and tells the user too many arguments given.
         print("Too many arguments given.")
         sys.exit(1)
 
@@ -240,8 +255,10 @@ def handle_input():
     :return: "three_or_more_arguments" or the "two_or_less_arguments" functions.
     """
     if len(sys.argv) > 2:
+        # use the function for 3 or more arguments if there are more than 2 arguments.
         return three_or_more_arguments()
     if len(sys.argv) <= 2:
+        # use the function for 2 or less arguments if the length of the command line is less than or equal to two.
         return two_or_less_arguments()
 
 
@@ -257,10 +274,12 @@ def read_line_by_line_constellation(opened_file):
     for line in opened_file:
         line_number = line_number + 1
         if line_number == 1:
+            # since the first line always contains the name the program counts the lines and makes sure to assign the name of the constellation to the first line stripped.
             constellation_name = line.rstrip()
         else:
             constellation_edges = line.rstrip().split(",")
             if not (len(constellation_edges) == NUMBER_OF_ENTRIES_IN_CONSTELLATION_FILE):
+                # if the length of the constellation edges seperated by commas is not 2 the program gives out a warning.
                 print("Invalid number of entries separated by commas on one of the lines, should be equal to 2.")
                 sys.exit(1)
             constellation_list.append(constellation_edges)
@@ -268,10 +287,18 @@ def read_line_by_line_constellation(opened_file):
 
 
 def print_and_get_used_stars(constellation_name, constellation_list):
+    """
+    Function uses the constellation_name and the constellation_list to print what constellation contains certain stars.
+    :param: constellation_name, name of the certain constellation.
+    :param: constellation_list, list of all the stars and their details in the constellation.
+    :return: constellation_name, the name of the constellation and constellation_list a list of all the edges in the constellation.
+    """
     # references: Getting keys from a dictionary https://www.geeksforgeeks.org/python-get-dictionary-keys-as-a-list/
     used_stars = {}
     for sub_list in constellation_list:
+        # the function goes through the list of constellations one by one.
         for name in sub_list:
+            # the function goes through the sub_list of constellations to get the name and put it in as a key for the used_stars dictionary.
             used_stars[name] = True
     print(f"{constellation_name} constellation contains {list(used_stars.keys())}")
     return used_stars
@@ -288,19 +315,24 @@ def drawing_constellation(pointer, constellation_list, stars_with_names_dictiona
     """
     try:
         for pairs in constellation_list:
+            # function goes through each pair that creates an edge in the constellation.
             star_1 = pairs[0]
             star_2 = pairs[1]
             list_star_1 = stars_with_names_dictionary[star_1]
             list_star_2 = stars_with_names_dictionary[star_2]
+            # finding the x and y for the first and the second star in the edge.
             x1 = list_star_1[0]
             y1 = list_star_1[1]
             x2 = list_star_2[0]
             y2 = list_star_2[1]
+            # finding the on screen values for the x and y of both stars.
             screen_x1, screen_y1 = calc_to_screen_coord(x1, y1)
             screen_x2, screen_y2 = calc_to_screen_coord(x2, y2)
             pointer.color(constellation_color)
+            # finally using all the values to draw the constellation.
             draw_line(pointer, screen_x1, screen_y1, screen_x2, screen_y2)
     except KeyError as error:
+        # error in case the constellation can not be found.
         print(f"The star named {error} can not be found.")
         sys.exit(1)
 
@@ -335,11 +367,12 @@ def handle_constellation_file_input(pointer, stars_with_names_dictionary):
         # Read constellation file (function)
         constellation_file_path = input("Enter a constellation file: ")
         if constellation_file_path == "":
+            # if the user enters "" for the constellation path file the program exits.
             exit()
         if os.path.isfile(constellation_file_path) is True:
+            # if the file path exists draw the constellation with the correct color as well as checking for any other errors through use of other functions.
             constellation_color = get_color(constellation_counter)
             constellation_counter = constellation_counter + 1
-            print(constellation_counter)
             check_file_extension(constellation_file_path)
             opened_file = open_file(constellation_file_path)
             constellation_name, constellation_list = read_line_by_line_constellation(opened_file)
@@ -357,10 +390,11 @@ def handle_constellation_file_input(pointer, stars_with_names_dictionary):
 
 def check_user_input():
     """
-    *****************************CHANGE ME LATER***************************************
-    :return: "three_or_more_arguments" or the "two_or_less_arguments" functions.
+    Function assigns print_names and stars_location_file values.
+    :return: print_names, is a boolean value which if true will make the program draw names. Stars_location_file, is the path to the stars file.
     """
     print_names, stars_location_file = handle_input()
+    # print_names and stars_location_file variables are assigned.
     return print_names, stars_location_file
 
 
@@ -372,6 +406,7 @@ def check_file_extension(stars_location_file):
     """
     # Checking file extension https://coderedirect.com/questions/120290/how-can-i-check-the-extension-of-a-file
     if not stars_location_file.endswith('.dat'):
+        # if the stars_location_file does not end with ".dat" the program exits and provides an explanation.
         print(f"extension of the file '{stars_location_file}' is not '.dat'. Exiting")
         sys.exit(1)
 
@@ -391,10 +426,13 @@ def open_file(file_path):
         if os.stat(file_path).st_size == ZERO:
             print(f"File {file_path} is empty")
             sys.exit(1)
+            # if the file is empty the program exits with a warning.
     except FileNotFoundError:
         print(f"This file '{file_path}' is not found. Exiting.")
+        # if the file can not be found the program exits with a warning.
         sys.exit(1)
     except Exception as error:
+        # if any common error occurs the program exits with descriptive message.
         print(f"Unexpected error happened trying to open this file '{file_path}'. Error {error}")
         sys.exit(1)
     return opened_file
@@ -413,8 +451,10 @@ def read_line_by_line_stars(opened_file):
     stars_with_names_dictionary = {}
     all_stars_list = []
     for line in opened_file:
+        # function loops through every line in the opened_file.
         star_information = line.rstrip().split(',')
         if not len(star_information) == 7:
+            # if the length of the line is not as it should be the program exits with a descriptive message.
             print("invalid number of entries separated by commas, should be equal to 7.")
             sys.exit(1)
         x = float(star_information[0])
@@ -422,6 +462,7 @@ def read_line_by_line_stars(opened_file):
         mag = float(star_information[4])
         names = star_information[6].split(';')
         for name in names:
+            # function loops through all of the names and places individual name with it's details.
             star_list = [x, y, mag, name]
             all_stars_list.append(star_list)
             if name != "":
@@ -440,6 +481,7 @@ def close_file(opened_file, file_path):
     try:
         opened_file.close()
     except Exception as error:
+        # program checks for any errors while closing the file and exits the program if there are errors found with a descriptive message.
         print(f"Unexpected error happened trying to close this file '{file_path}'. Error {error}")
         sys.exit(1)
 
@@ -467,6 +509,7 @@ def draw_star(pointer, x, y, mag, star_color):
     :param: star_color, the color of the star depending on if it has a name or does not have a name.
     :return: Function draws a given star in turtle.
     """
+    # function finds the on screen values, draws the star with the correct diameter using the magnitude of the star.
     screen_x, screen_y = calc_to_screen_coord(x, y)
     pointer.penup()
     pointer.goto(screen_x, screen_y)
@@ -487,6 +530,7 @@ def draw_star_name(pointer, name_of_star, x, y):
     :return: Function draws a given star name in turtle.
     """
     screen_x, screen_y = calc_to_screen_coord(x, y)
+    # function goes to the on screen coordinates of the star and adds 5 pixels over it to make sure the name of the s tar does not get in the way of the star.
     pointer.goto(screen_x, screen_y + HALF_OF_TICK)
     pointer.write(name_of_star, font=("Arial", 5, "normal"))
 
@@ -506,8 +550,10 @@ def drawing_stars(pointer, print_names, all_stars_list, stars_with_names_diction
         y = i[1]
         mag = i[2]
         draw_star(pointer, x, y, mag, STAR_COLOR2)
+        # the function draws stars from the all_star_list
     # https://www.w3schools.com/python/trypython.asp?filename=demo_dictionary_loop_items
     for star_name, my_value in stars_with_names_dictionary.items():
+        # the function takes the key and the value assigned in the stars_with_names_dictionary and draws the stars and their names.
         x = my_value[0]
         y = my_value[1]
         mag = my_value[2]
